@@ -109,6 +109,66 @@ if (imu0.ypr[1]) > 5:
   Visitor_Button_Home.set_hidden(False)
 else:
   if (imu0.ypr[1]) < -5:
-    Close_Sign.set_hidden(False)
-    Temperature.set_hidden(False)
-    Temperature.set_text(str((str('Temperature:') + str((power.getTempInAXP192())))))
+    from m5stack import *
+    from m5stack_ui import *
+    from uiflow import *
+    from IoTcloud.AWS import AWS
+    import json
+
+
+    screen = M5Screen()
+    screen.clean_screen()
+    screen.set_screen_bg_color(0x5a3b5d)
+
+
+    maskboxes = None
+    employee = None
+
+
+    mask_button = M5Btn(text='Masks', x=10, y=56, w=300, h=70, bg_c=0xfedc2a, text_c=0x5a3b5d, font=FONT_MONT_40, parent=None)
+    medicine_button = M5Btn(text='Medicine', x=10, y=140, w=300, h=70, bg_c=0xfedc2a, text_c=0x5a3b5d, font=FONT_MONT_40, parent=None)
+    Stock_Label = M5Label('Stock', x=27, y=7, color=0xffffff, font=FONT_MONT_20, parent=None)
+    add_mask = M5Btn(text='+', x=46, y=143, w=75, h=70, bg_c=0xfedc2a, text_c=0x5a3b5d, font=FONT_MONT_40, parent=None)
+    remove_mask = M5Btn(text='-', x=186, y=145, w=75, h=70, bg_c=0xfedc2a, text_c=0x5a3b5d, font=FONT_MONT_40, parent=None)
+    medicine_amount = M5Label('Amount: 0', x=43, y=64, color=0xffffff, font=FONT_MONT_40, parent=None)
+
+    from numbers import Number
+
+
+
+    def mask_button_pressed():
+      global maskboxes, employee
+      medicine_amount.set_hidden(False)
+      mask_button.set_hidden(True)
+      medicine_button.set_hidden(True)
+      medicine_remove.set_hidden(False)
+      add_medicine.set_hidden(False)
+      pass
+    mask_button.pressed(mask_button_pressed)
+
+    def add_mask_pressed():
+      global maskboxes, employee
+      maskboxes = (maskboxes if isinstance(maskboxes, Number) else 0) + 1
+      aws.publish(str('masks'),str((json.dumps(({'Employee':employee,'Amount':maskboxes})))))
+      medicine_amount.set_text(str((str('Amount:') + str(maskboxes))))
+      pass
+    add_mask.pressed(add_mask_pressed)
+
+    def remove_mask_pressed():
+      global maskboxes, employee
+      maskboxes = (maskboxes if isinstance(maskboxes, Number) else 0) + -1
+      aws.publish(str('masks'),str((json.dumps(({'Employee':employee,'Amount':maskboxes})))))
+      medicine_amount.set_text(str((str('Amount:') + str(maskboxes))))
+      pass
+    remove_mask.pressed(remove_mask_pressed)
+
+
+    employee = 'Ashwin'
+    medicine_amount.set_hidden(True)
+    add_medicine.set_hidden(True)
+    medicine_remove.set_hidden(True)
+    mask_button.set_hidden(False)
+    medicine_button.set_hidden(False)
+    maskboxes = 0
+    aws = AWS(things_name='volatus', host='affaxcdeac20e-ats.iot.us-east-1.amazonaws.com', port=8883, keepalive=60, cert_file_path="/flash/res/certificate.pem.crt", private_key_path="/flash/res/private.pem.key")
+    aws.start()
