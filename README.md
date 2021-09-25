@@ -6,3 +6,11 @@ Care homes have been one of the worst affected by the COVID pandemic, with high 
 Meet Devolatus, the multi-functional smart IoT dashboard, helping to make care homes a safe space by improving digital infrastructure and logistics tracking.
 
 The device allows care home workers to track capacity and sends reminders whenever capacity is reached. Moreover, the dashboard helps workers keep track of vital supplies (e.g. PPE), providing reminders when stocks are low. The system uses AWS IoT + Analytics and SNS to store all relevant data safely and securely and send notifications accordingly.
+
+# Pre-Requisites
+Follow this guide at Hackster.io to setup all of the necessary AWS rules and IoT pathways: https://www.hackster.io/cyborgash122/devolatus-smart-iot-dashboard-for-care-homes-9dc85d
+
+# Implementation
+Using UI Flow (https://flow.m5stack.com/) you can add the python code and run it to the M5 Stack. Make sure to flash all certificates as required.
+
+
