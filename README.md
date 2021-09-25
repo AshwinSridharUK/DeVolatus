@@ -11,7 +11,7 @@ The device allows care home workers to track capacity and sends reminders whenev
 Follow this guide at Hackster.io to setup all of the necessary AWS rules and IoT pathways: https://www.hackster.io/cyborgash122/devolatus-smart-iot-dashboard-for-care-homes-9dc85d
 
 # Implementation
-Using UI Flow (https://flow.m5stack.com/) you can add the python code (main.py) and run it to the M5 Stack. Make sure to flash all certificates as required. Credentials must be swapped out where declared. 
+Using UI Flow (https://flow.m5stack.com/) you can add the python code (maindashboard.py) to the python section and run it to the M5 Stack. Alternatively you can download and run the .M5F files directly into UIFLOW. Make sure to flash all certificates as required. Credentials must be swapped out where declared. 
 
 AWS SQL Query Codes are part of AWS IoT Rules Section. 
 
