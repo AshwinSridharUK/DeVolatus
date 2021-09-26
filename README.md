@@ -1,4 +1,4 @@
-# DeVolatus
+# DeVolatus: Smart IoT Dashboard for Care Homes
 # Story
 Care homes have been one of the worst affected by the COVID pandemic, with high levels of transmission. Care workers have had to adapt to the pandemic, with a more demanding workload, exacerbated by poor digital infrastructure. From tracking testing results to PPE stock, care homes struggle with collecting and managing data. In turn, growing concerns over the safety of transmissions across care homes, have heightened restrictions, leading to many missing out on meeting their loved ones. An all-in-one solution, which can help care workers to track vital data securely is necessary.
 
