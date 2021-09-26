@@ -17,5 +17,6 @@ AWS SQL Query Codes are part of AWS IoT Rules Section.
 
 # Video Demo
 https://user-images.githubusercontent.com/69058244/134806098-0d364719-ff0a-4e46-b36e-b363f544e3bf.mp4
+
 Youtube Link: https://youtu.be/QtRY_xpeDZE
 
