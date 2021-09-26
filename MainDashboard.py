@@ -12,7 +12,7 @@ screen.clean_screen()
 screen.set_screen_bg_color(0x5a3b5d)
 
 
-Capacity = None
+Capacity = None #Creates variable called "Capacity" without any value
 
 imu0 = imu.IMU()
 Sign_In_Visitor = M5Btn(text='Sign In', x=10, y=56, w=300, h=70, bg_c=0xfedc2a, text_c=0x5a3b5d, font=FONT_MONT_40, parent=None)
@@ -21,35 +21,35 @@ label0 = M5Label('Home', x=27, y=8, color=0xffffff, font=FONT_MONT_20, parent=No
 Staff_Button_Home = M5Btn(text='Staff', x=10, y=56, w=300, h=70, bg_c=0xfedc2a, text_c=0x5a3b5d, font=FONT_MONT_40, parent=None)
 Visitor_Button_Home = M5Btn(text='Visitor', x=10, y=140, w=300, h=70, bg_c=0xfedc2a, text_c=0x5a3b5d, font=FONT_MONT_40, parent=None)
 Error_Registration = M5Label('Error- Contact Front Desk', x=68, y=213, color=0xffffff, font=FONT_MONT_14, parent=None)
-
+#creates all the UI elements
 from numbers import Number
 
 
-# Describe this function...
+# Shows staff (non-functional) and visitor button on UI
 def OpenHome():
   global Capacity
   Staff_Button_Home.set_hidden(False)
   Visitor_Button_Home.set_hidden(False)
 
-# Describe this function...
+# Hides staff (non-functional) and visitor button on UI.
 def CloseHome():
   global Capacity
   Staff_Button_Home.set_hidden(True)
   Visitor_Button_Home.set_hidden(True)
 
-# Describe this function...
+# Shows the visitor sign in and out buttons
 def OpenVisitorSign():
   global Capacity
   Sign_In_Visitor.set_hidden(False)
   Sign_Out_Visitor.set_hidden(False)
 
-# Describe this function...
+# Hides the visitor sign in and out buttons
 def CloseVisitorSign():
   global Capacity
   Sign_In_Visitor.set_hidden(True)
   Sign_Out_Visitor.set_hidden(True)
 
-
+# Changes from initial to visitor sign in screen when visitor button pressed
 def Visitor_Button_Home_pressed():
   global Capacity
   CloseHome()
@@ -57,7 +57,7 @@ def Visitor_Button_Home_pressed():
   OpenVisitorSign()
   pass
 Visitor_Button_Home.pressed(Visitor_Button_Home_pressed)
-
+# Increases Capacity variable by + 1 and sends MQTT request to AWS IoT. Plays speaker notification and WAV file to validate sucess on the user end.
 def Sign_In_Visitor_pressed():
   global Capacity
   Capacity = (Capacity if isinstance(Capacity, Number) else 0) + 1
@@ -71,7 +71,7 @@ def Sign_In_Visitor_pressed():
   OpenHome()
   pass
 Sign_In_Visitor.pressed(Sign_In_Visitor_pressed)
-
+# Decreases Capacity variable by 1 and sends MQTT request to AWS IoT. Plays speaker notification and WAV file to validate sucess on the user end. If capacity is already equal to 0 an error is thrown.
 def Sign_Out_Visitor_pressed():
   global Capacity
   if Capacity > 0:
@@ -98,7 +98,9 @@ Sign_In_Visitor.set_hidden(True)
 Sign_Out_Visitor.set_hidden(True)
 rgb.setColorAll(0xffffff)
 aws = AWS(things_name='enterthingname', host='enterhostname', port=8883, keepalive=60, cert_file_path="/flash/res/certificate.pem.crt", private_key_path="/flash/res/private.pem.key")
+#setups AWS IoT connection- replace with your own credentials
 aws.start()
+#Checks Orientation of device, once the orientation is set it will either replace with the user or staff mode. Can only be changes by switching the device off and turning back around
 if (imu0.ypr[1]) > 5:
   Error_Registration.set_hidden(True)
   Staff_Button_Home.set_hidden(False)
@@ -122,7 +124,7 @@ else:
     employee = None
     medicine = None
     CodeData = None
-
+    #Creates necessary variables
 
     mask_button = M5Btn(text='Masks', x=10, y=56, w=300, h=70, bg_c=0xfedc2a, text_c=0x5a3b5d, font=FONT_MONT_40, parent=None)
     mask_amount = M5Label('Amount: 0', x=42, y=48, color=0xffffff, font=FONT_MONT_40, parent=None)
@@ -144,11 +146,11 @@ else:
     remove_medicine = M5Btn(text='-', x=186, y=103, w=75, h=70, bg_c=0xfedc2a, text_c=0x5a3b5d, font=FONT_MONT_42, parent=None)
     back_medicine = M5Btn(text='<', x=6, y=175, w=56, h=56, bg_c=0xfedc2a, text_c=0x5a3b5d, font=FONT_MONT_42, parent=None)
     medicine_amount = M5Label('Amount:', x=42, y=48, color=0xffffff, font=FONT_MONT_42, parent=None)
-
+    #Creates UI elements (buttons, labels etc.)
     from numbers import Number
 
 
-
+    #Automatically hides UI elements and switches to mask inventory mode
     def mask_button_pressed():
       global maskboxes, employee, medicine, CodeData
       mask_amount.set_hidden(False)
@@ -159,7 +161,7 @@ else:
       remove_mask.set_hidden(False)
       pass
     mask_button.pressed(mask_button_pressed)
-
+  #Adds mask to the variable "maskboxes" and publishhes new value as MQTT using JSON format, with employee name and maskboxes amount
     def add_mask_pressed():
       global maskboxes, employee, medicine, CodeData
       maskboxes = (maskboxes if isinstance(maskboxes, Number) else 0) + 1
@@ -167,7 +169,7 @@ else:
       mask_amount.set_text(str((str('Amount:') + str(maskboxes))))
       pass
     add_mask.pressed(add_mask_pressed)
-
+#Removes mask to the variable "maskboxes" and publishhes new value as MQTT using JSON format, with employee name and maskboxes amount. Only works when masks amount is >0 or else throws error to the user
     def remove_mask_pressed():
       global maskboxes, employee, medicine, CodeData
       if maskboxes > 0:
@@ -181,7 +183,9 @@ else:
         rgb.setColorAll(0xffffff)
       pass
     remove_mask.pressed(remove_mask_pressed)
-
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#Buttons for the employee code setup
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     def A_Button_pressed():
       global maskboxes, employee, medicine, CodeData
       employee = (str(employee) + str('A'))
@@ -230,7 +234,7 @@ else:
       Code_Display.set_btn_text(employee)
       pass
     Three_Button.pressed(Three_Button_pressed)
-
+#Enter button which checks to see if the employee codes is stored inside the map. If true, extracts the key value and publishes a MQTT message with employee code and name
     def Ent_Button_pressed():
       global maskboxes, employee, medicine, CodeData
       if (employee in CodeData.keys()) == True:
@@ -337,6 +341,6 @@ else:
     Back_Masks.set_hidden(True)
     back_medicine.set_hidden(True)
     maskboxes = 0
-    CodeData = {'AB321':'Ashwin','CB123':'James'}
+    CodeData = {'AB321':'Ashwin','CB123':'James'} #Example map ("CodeData") with user names and keycodes.
     aws = AWS(things_name='enterthingname', host='enterhostname', port=8883, keepalive=60, cert_file_path="/flash/res/certificate.pem.crt", private_key_path="/flash/res/private.pem.key")
     aws.start()
